@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pre-commit = "*"
+flake8 = "*"
+mccabe = "*"
+pytest-bdd = "*"
+
+[packages]
+click = "*"
+garminexport = {editable = true,git = "https://github.com/petergardfjall/garminexport.git"}
+fs = "*"
+
+[requires]
+python_version = "3.7"
