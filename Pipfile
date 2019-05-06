@@ -16,6 +16,9 @@ pytest-bdd = "*"
 click = "*"
 garminexport = {editable = true,git = "https://github.com/petergardfjall/garminexport.git"}
 fs = "*"
+fitdecode = "*"
+geopandas = "*"
+shapely = "*"
 
 [requires]
 python_version = "3.7"
