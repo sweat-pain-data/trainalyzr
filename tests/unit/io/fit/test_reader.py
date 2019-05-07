@@ -30,7 +30,7 @@ def test_reader_dataframe(reader):
     assert names[5] == "heart_rate"
     assert types.is_float_dtype(dtypes[5])
     assert names[6] == "power"
-    assert types.is_int64_dtype(dtypes[6]), dtypes[6]
+    assert types.is_unsigned_integer_dtype(dtypes[6])
 
 
 def test_reader_activity(reader):

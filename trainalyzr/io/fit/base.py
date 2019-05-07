@@ -1,6 +1,8 @@
 from datetime import timezone
 import fitdecode
-from geopandas import GeoDataFrame
+import numpy as np
+import pandas as pd
+from geopandas import GeoDataFrame, GeoSeries
 from shapely.geometry import Point
 
 
@@ -32,21 +34,28 @@ def get_position(frame, _):
 
 RECORD_FIELDS = [{
     "name": "timestamp",
-}, {
-    "name": "position",
-    "getter": get_position,
+    "dtype": "datetime64[ns, UTC]",
+    }, {
+        "name": "position",
+        "series": GeoSeries,
+        "getter": get_position,
 }, {
     "name": "distance",
+    "dtype": np.float,
 }, {
     "name": "speed",
+    "dtype": np.float,
     "source_field": "enhanced_speed",
 }, {
     "name": "altitude",
+    "dtype": np.float,
     "source_field": "enhanced_altitude",
 }, {
     "name": "heart_rate",
+    "dtype": np.float,
 }, {
     "name": "power",
+    "dtype": "uint16",
     "source_field": "Power",
 }]
 
@@ -83,8 +92,10 @@ class FitReader():
                 getter = field.get('getter', default_getter)
                 data[field['name']].append(getter(frame, field))
 
-        dataframe = GeoDataFrame.from_dict(data)
-        return dataframe
+        for field in RECORD_FIELDS:
+            cls = field.get("series", pd.Series)
+            data[field["name"]] = cls(data=data[field["name"]], dtype=field.get("dtype"))
+        return GeoDataFrame(data=data)
 
     def _extend_dataframe(self, dataframe):
         dataframe['duration'] = [(t - dataframe['timestamp'][0]).total_seconds() for t in dataframe['timestamp']]
